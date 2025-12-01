@@ -1,0 +1,18 @@
+version: '3.8' # Version de Docker Compose
+
+services:
+  db:
+    image: postgres:16-alpine #Imagen ligera de PostgreSQL
+    restart: always #Asegura que se reinicie si falla
+    environment:
+      POSTGRES_USER: user_nails # Usuario de la DB
+      POSTGRES_PASSWORD: secret_password # Password (Usar una mas segura en produccion)
+      POSTGRES_DB: nail_studio_db # Nombre de la base de datos
+    ports: 
+      - "5432:5432" # Mapea el puerto del contenedor (5432) al puerto local (5432)
+    volumes: 
+      - db-data:/var/lib/postgresql/data # Persistencia de los datos
+  # Agregar servicio de nuestra api
+
+volumes:
+  db-data:

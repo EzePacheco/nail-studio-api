@@ -1,0 +1,71 @@
+// Configuracion de la DB
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+// Generador del cliente
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Modelos (Entidades del dominio)
+
+model Service {
+  id Int @id @default(autoincrement())
+  name String @unique
+  duration Int
+  price Float
+  description String?
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+
+  // Relacion -> Un servicio puede tener muchos turnos
+  appointments Appointment[]
+}
+
+model Client {
+  id Int @id @default(autoincrement())
+  name String
+  phone String @unique
+  email String? @unique
+  created_at DateTime @default(now())
+
+  // Relacion -> Un cliente puede tener muchos turnos
+  appointments Appointment[]
+}
+
+model Appointment {
+  id Int @id @default(autoincrement())
+
+  // ? Relaciones
+  // 1. Cliente -> Un turno pertenece a Un cliente
+  client_id Int
+  client Client @relation(fields: [client_id], references: [id])
+
+  // 2. Servicios -> Un turno esta asociado a Un servicio
+  service_id Int
+  service Service @relation(fields: [service_id], references: [id])
+
+  // ! Datos del turno
+  start_time DateTime
+  end_time DateTime
+  status Status @default(PENDING) // Manejaremos los estados con Enum
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // ! Restriccion unica => Asegura que no haya dos turnos iguales
+  @@unique([client_id, service_id, start_time])
+
+  // * Opcional para busquedas por fecha
+  @@index([start_time])
+}
+
+// ENUM: Tipos de estado de turno
+enum Status {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2020",                /* Versión moderna de JS */
+    "module": "commonjs",              /* Node usa commonjs por defecto */
+    "outDir": "./dist",                /* Dónde se guardará el código compilado */
+    "rootDir": "./src",                /* Dónde está tu código fuente */
+    "strict": true,                    /* ¡CRUCIAL! Activa todas las verificaciones estrictas */
+    "esModuleInterop": true,           /* Permite importar librerías viejas de JS */
+    "skipLibCheck": true,              /* Acelera la compilación ignorando chequeos en node_modules */
+    "forceConsistentCasingInFileNames": true, /* Evita errores por mayúsculas/minúsculas en imports */
+    
+    /* Configuración para Rutas Absolutas (Opcional pero recomendado para clean code) */
+    "baseUrl": ".",
+    "paths": {
+      "@controllers/*": ["src/controllers/*"],
+      "@services/*": ["src/services/*"],
+      "@models/*": ["src/models/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
