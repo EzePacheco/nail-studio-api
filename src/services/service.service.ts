@@ -27,6 +27,56 @@ export class ServiceService {
 
         return services;
     }
+
+    /**
+     * Obtener servicio por ID
+     */
+
+    async getServiceById(id: number): Promise<Service> {
+        const service = await this.serviceRepository.findById(id);
+
+        if (!service) {
+            throw new Error(` Servicio con ID ${id} no encontrado`);
+        }
+        return service;
+    }
+
+    /**
+     * Actualizar un servicio
+     */
+
+    async updateService(id: number, data: { name?: string, duration?: number, price?: number }): Promise<Service> {
+        // Verificamos que el cliente existe
+        await this.getServiceById(id);
+
+        // Validaciones
+        if (data.price !== undefined && data.price < 0) {
+            throw new Error('El precio del servicio no puede ser negativo');
+        }
+
+        if (data.duration !== undefined && data.duration <= 0) {
+            throw new Error('La duración debe ser mayor a 0 minutos');
+        }
+
+        if (data.name !== undefined && data.name.trim().length < 3) {
+            throw new Error('El nombre debe tener al menos 3 caracteres');
+        }
+
+        return this.serviceRepository.update(id, data);
+    }
+
+    /**
+     * Eliminar un cliente
+     */
+    async deleteService(id: number): Promise<Service> {
+        // Verificar si el cliente existe
+        await this.getServiceById(id);
+        
+        // TODO: Verificar que no tenga turnos activos antes de eliminar
+
+        return this.serviceRepository.delete(id)
+    }
+
     /**
        * Lógica de Negocio: Crear un nuevo servicio
     */
@@ -40,7 +90,6 @@ export class ServiceService {
         // Llamar al repositorio para la accion en la DB
         return this.serviceRepository.create(data);
     }
-
     // TODO: servicio update, servicio findById, servicio delete.
 
 }

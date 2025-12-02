@@ -1,6 +1,8 @@
 import express, { Application } from 'express';
 import { envs } from './config/envs';
-import serviceRouter from './controllers/service.controller';
+import clientRouter from './routes/client.routes'
+import serviceRouter from './routes/service.routes'
+
 import { db } from './config/prisma';
 
 const app: Application = express();
@@ -8,7 +10,8 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware 
 app.use(express.json()); // ? Permite a Express leer el cuerpo de las peticiones en formato JSON
-app.use('/services', serviceRouter) //? Montar los routers de la aplicación
+app.use('/services', serviceRouter)
+app.use('/clients', clientRouter)
 
 // Ruta de prueba
 app.get('/', (req, res) => {

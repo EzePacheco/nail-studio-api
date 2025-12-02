@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
-import { serviceService } from '../services/service.service';
+import { clientService } from '../services/client.service';
 
-export class ServiceController {
+export class ClientController {
 
-    async getAllActiveServices(req: Request, res: Response) {
+    async getAllClients(req: Request, res: Response) {
         try {
-            const services = await serviceService.getAllActiveServices();
-            return res.status(200).json(services);
+            const clients = await clientService.getAllClients();
+            return res.status(200).json(clients);
         } catch (e: any) {
             return res.status(500).json({ error: e.message });
         }
     }
 
-    async getServiceById(req: Request, res: Response) {
+    async getClientById(req: Request, res: Response) {
         try {
             const id = parseInt(req.params.id);
 
@@ -22,8 +22,8 @@ export class ServiceController {
                 });
             }
 
-            const service = await serviceService.getServiceById(id);
-            return res.status(200).json(service);
+            const client = await clientService.getClientById(id);
+            return res.status(200).json(client);
         } catch (e: any) {
             if (e.message.includes('no encontrado')) {
                 return res.status(404).json({ error: e.message });
@@ -32,24 +32,24 @@ export class ServiceController {
         }
     }
 
-    async createService(req: Request, res: Response) {
+    async createClient(req: Request, res: Response) {
         try {
-            const { name, duration, price } = req.body;
+            const { name, phone, email } = req.body;
 
-            if (!name || !duration || !price) {
+            if (!name || !phone) {
                 return res.status(400).json({
-                    error: 'Faltan campos requeridos: name, duration y price.'
+                    error: 'Faltan campos requeridos: name y phone'
                 });
             }
 
-            const newService = await serviceService.createService({ name, duration, price });
-            return res.status(201).json(newService);
+            const newClient = await clientService.createClient({ name, phone, email });
+            return res.status(201).json(newClient);
         } catch (e: any) {
             return res.status(500).json({ error: e.message });
         }
     }
 
-    async updateService(req: Request, res: Response) {
+    async updateClient(req: Request, res: Response) {
         try {
             const id = parseInt(req.params.id);
 
@@ -59,16 +59,16 @@ export class ServiceController {
                 });
             }
 
-            const { name, duration, price } = req.body;
+            const { name, phone, email } = req.body;
 
-            if (!name && !duration && !price) {
+            if (!name && !phone && !email) {
                 return res.status(400).json({
                     error: 'Debe proporcionar al menos un campo para actualizar.'
                 });
             }
 
-            const updateService = await serviceService.updateService(id, { name, duration, price });
-            return res.status(200).json(updateService);
+            const updatedClient = await clientService.updateClient(id, { name, phone, email });
+            return res.status(200).json(updatedClient);
         } catch (e: any) {
             if (e.message.includes('no encontrado')) {
                 return res.status(404).json({ error: e.message });
@@ -77,7 +77,7 @@ export class ServiceController {
         }
     }
 
-    async deleteService(req: Request, res: Response) {
+    async deleteClient(req: Request, res: Response) {
         try {
             const id = parseInt(req.params.id);
 
@@ -87,10 +87,10 @@ export class ServiceController {
                 });
             }
 
-            const deletedService = await serviceService.deleteService(id);
+            const deletedClient = await clientService.deleteClient(id);
             return res.status(200).json({
-                message: 'Servicio eliminado correctamente.',
-                service: deletedService
+                message: 'Cliente eliminado correctamente.',
+                client: deletedClient
             });
         } catch (e: any) {
             if (e.message.includes('no encontrado')) {
@@ -102,4 +102,4 @@ export class ServiceController {
 }
 
 // Exportar la instancia
-export const serviceController = new ServiceController();
+export const clientController = new ClientController();
