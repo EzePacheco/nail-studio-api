@@ -1,10 +1,10 @@
 # 💅 Nail Studio API - Gestión de Turnos y Servicios
 
 ## 🚀 Estado del Proyecto
-![Badge de Estado](https://img.shields.io/badge/Estado-En%20Desarrollo%20(Fase%201)-blue)
-![Badge de Versión](https://img.shields.io/badge/Versi%C3%B3n-0.1.0-orange)
+![Badge de Estado](https://img.shields.io/badge/Estado-En%20Desarrollo%20(Fase%201%20Completada)-green)
+![Badge de Versión](https://img.shields.io/badge/Versi%C3%B3n-0.2.0-orange)
 
-API RESTful desarrollada con **Node.js y TypeScript** para la gestión de servicios y turnos de un estudio de uñas. El proyecto implementa una **arquitectura de capas** (Controlador, Servicio y Repositorio) para asegurar la escalabilidad y la separación de responsabilidades.
+API RESTful desarrollada con **Node.js y TypeScript** para la gestión de servicios, clientes y turnos de un estudio de uñas. El proyecto implementa una **arquitectura de capas** (Controlador, Servicio y Repositorio) para asegurar la escalabilidad y la separación de responsabilidades.
 
 ---
 
@@ -18,6 +18,16 @@ API RESTful desarrollada con **Node.js y TypeScript** para la gestión de servic
 | **ORM** | **Prisma** | Cliente de base de datos y herramienta de migración. |
 | **Contenedor** | **Docker Compose** | Entorno local y aislado para la DB. |
 | **Arquitectura** | **Capas** | Patrón Repository y Service para la lógica de negocio. |
+
+---
+
+## 📊 Modelo de Datos
+
+El proyecto cuenta con tres entidades principales:
+
+- **Service**: Servicios ofrecidos por el estudio (ej: esmaltado, manicura, etc.)
+- **Client**: Clientes registrados en el sistema
+- **Appointment**: Turnos agendados (relaciona Cliente + Servicio + Fecha/Hora)
 
 ---
 
@@ -37,7 +47,6 @@ Asegúrate de tener instalado:
 Crea un archivo llamado **`.env`** en la raíz del proyecto. **Este archivo está en el `.gitignore` y NUNCA debe subirse a GitHub.**
 
 Utiliza la siguiente estructura para las variables de conexión local (los valores deben coincidir con tu `docker-compose.yml`):
-
 ```env
 # Servidor Express
 PORT=3000
@@ -55,7 +64,6 @@ DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_
 
 ### 3. 🐳 Levantar la Base de Datos con Docker
 Inicia el contenedor de PostgreSQL con Docker Compose:
-
 ```bash
 docker compose up -d
 ```
@@ -66,12 +74,12 @@ Instala los paquetes de Node y aplica la estructura de la base de datos:
 npm install
 ```
 
-### Aplica la migración inicial de tablas (Service, Client, Appointment)
+Aplica las migraciones de la base de datos:
 ```bash
-npm run prisma:migrate -- --name init_structure
+npm run prisma:migrate dev
 ```
 
-### Genera el cliente de Prisma para TypeScript
+Genera el cliente de Prisma para TypeScript:
 ```bash
 npm run prisma:generate
 ```
@@ -85,25 +93,71 @@ npm run dev
 Deberías ver la confirmación en la terminal: 
 ```bash
 ✅ Conexión a PostgreSQL establecida con éxito.
+🚀 Servidor corriendo en http://localhost:3000
 ```
 
-### 🌎 Endpoints Actuales (Fase 1: Servicios)
-Utiliza Postman o herramientas similares para probar los endpoints en la **URL base:** http://localhost:3000.
+---
 
-### 1. Crear un Servicio
-| Propiedad       | Valor                                                                            |
-| --------------- | -------------------------------------------------------------------------------- |
-| **URL**         | `/services`                                                                      |
-| **Método**      | `POST`                                                                           |
-| **Body (JSON)** | `json { "name": "Esmaltado Semipermanente", "duration": 60, "price": 8500.00 } ` |
-| **Función**     | Crea un nuevo servicio en el catálogo.                                           |
-| **Respuesta**   | `201 Created`                                                                    |
+## 🌎 Endpoints Disponibles
 
+Utiliza **Postman**, **Thunder Client** o herramientas similares para probar los endpoints.
 
-### 2. Obtener Servicios Activos
-| Propiedad     | Valor                                               |
-| ------------- | --------------------------------------------------- |
-| **URL**       | `/services`                                         |
-| **Método**    | `GET`                                               |
-| **Función**   | Devuelve un listado de todos los servicios activos. |
-| **Respuesta** | `200 OK` (Array de servicios)                       |
+**URL Base:** `http://localhost:3000`
+
+### 📋 Servicios (`/services`)
+
+| Método | Endpoint | Descripción | Body |
+|--------|----------|-------------|------|
+| `GET` | `/services` | Obtener todos los servicios | - |
+| `GET` | `/services/:id` | Obtener un servicio por ID | - |
+| `POST` | `/services` | Crear un nuevo servicio | `{ "name": "Manicura", "duration": 60, "price": 5000 }` |
+| `PATCH` | `/services/:id` | Actualizar un servicio | `{ "name": "...", "duration": ..., "price": ... }` |
+| `DELETE` | `/services/:id` | Eliminar un servicio | - |
+
+### 👤 Clientes (`/clients`)
+
+| Método | Endpoint | Descripción | Body |
+|--------|----------|-------------|------|
+| `GET` | `/clients` | Obtener todos los clientes | - |
+| `GET` | `/clients/:id` | Obtener un cliente por ID | - |
+| `POST` | `/clients` | Crear un nuevo cliente | `{ "name": "María García", "phone": "1145678901", "email": "maria@mail.com" }` |
+| `PATCH` | `/clients/:id` | Actualizar un cliente | `{ "name": "...", "phone": "...", "email": "..." }` |
+| `DELETE` | `/clients/:id` | Eliminar un cliente | - |
+
+**Nota:** El campo `email` es opcional en clientes.
+
+### 📅 Turnos (`/appointments`) - Próximamente
+
+En desarrollo para la próxima versión.
+
+---
+
+## 🗂️ Estructura del Proyecto
+```
+src/
+├── controllers/      # Manejo de peticiones HTTP
+├── services/         # Lógica de negocio
+├── repositories/     # Acceso a datos (Prisma)
+├── routes/           # Definición de endpoints
+├── models/           # Tipos e interfaces
+└── config/           # Configuración (DB, etc.)
+```
+
+---
+
+## 🚧 Roadmap
+
+- [x] **Fase 1**: CRUD completo de Servicios y Clientes
+- [ ] **Fase 2**: Implementar gestión de Turnos (Appointments)
+- [ ] **Fase 3**: Agregar validaciones con Zod
+- [ ] **Fase 4**: Autenticación y autorización
+- [ ] **Fase 5**: Notificaciones y recordatorios
+
+---
+
+## 👨‍💻 Desarrollo
+
+Este proyecto es parte de mi aprendizaje en desarrollo backend. Cualquier feedback o sugerencia es bienvenida.
+
+**Universidad:** Universidad Nacional de Quilmes  
+**Inicio de cursada:** Febrero 2026
