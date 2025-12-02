@@ -43,40 +43,29 @@ Asegúrate de tener instalado:
 * **Docker** y **Docker Compose**
 
 ### 2. Variables de Entorno y Seguridad
+Crear archivo .env basado en .env.example:
 
-Crea un archivo llamado **`.env`** en la raíz del proyecto. **Este archivo está en el `.gitignore` y NUNCA debe subirse a GitHub.**
-
-Utiliza la siguiente estructura para las variables de conexión local (los valores deben coincidir con tu `docker-compose.yml`):
-```env
-# Servidor Express
-PORT=3000
-
-# Configuración de la Base de Datos (PostgreSQL - Docker)
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=user_nails
-DB_PASSWORD=secret_password
-DB_NAME=nail_studio_db
-
-# Prisma
-DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
-```
-
-### 3. 🐳 Levantar la Base de Datos con Docker
-Inicia el contenedor de PostgreSQL con Docker Compose:
 ```bash
-docker compose up -d
+cp .env.example .env
 ```
 
-### 4. 📦 Instalación de Dependencias e Inicialización
+### 3. 📦 Instalación de Dependencias e Inicialización
 Instala los paquetes de Node y aplica la estructura de la base de datos:
 ```bash
 npm install
 ```
 
+### 4. 🐳 Levantar la Base de Datos con Docker
+⚠️ Asegurate de que el puerto 5432 esté libre.
+
+Inicia el contenedor de PostgreSQL con Docker Compose:
+```bash
+docker compose up -d
+```
+
 Aplica las migraciones de la base de datos:
 ```bash
-npm run prisma:migrate dev
+npm run prisma:migrate
 ```
 
 Genera el cliente de Prisma para TypeScript:
