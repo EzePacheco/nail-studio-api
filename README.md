@@ -1,10 +1,12 @@
 # 💅 Nail Studio API - Gestión de Turnos y Servicios
 
 ## 🚀 Estado del Proyecto
-![Badge de Estado](https://img.shields.io/badge/Estado-En%20Desarrollo%20(Fase%201%20Completada)-green)
-![Badge de Versión](https://img.shields.io/badge/Versi%C3%B3n-0.2.0-orange)
+![Badge de Estado](https://img.shields.io/badge/Estado-En%20Desarrollo%20(Fase%202%20Completada)-green)
+![Badge de Versión](https://img.shields.io/badge/Versi%C3%B3n-0.3.0-orange)
 
-API RESTful desarrollada con **Node.js y TypeScript** para la gestión de servicios, clientes y turnos de un estudio de uñas. El proyecto implementa una **arquitectura de capas** (Controlador, Servicio y Repositorio) para asegurar la escalabilidad y la separación de responsabilidades.
+API RESTful desarrollada con **Node.js y TypeScript** para la gestión de servicios, clientes y turnos de un estudio de uñas. El proyecto implementa una **arquitectura de capas** (Controlador, Servicio y Repositorio) para asegurar la escalabilidad y la separación de responsabilidades. 
+
+[Image of layered architecture request flow nodejs]
 
 ---
 
@@ -117,7 +119,13 @@ Utiliza **Postman**, **Thunder Client** o herramientas similares para probar los
 
 ### 📅 Turnos (`/appointments`) - Próximamente
 
-En desarrollo para la próxima versión.
+| Método | Endpoint | Descripción | Body |
+|--------|----------|-------------|------|
+| `GET` | `/appointments` | Obtener todos los turnos | - |
+| `GET` | `/appointments/:id` | Obtener un turno por ID | - |
+| `POST` | `/appointments` | Crear un nuevo turno | `{ "client_id": 1, "service_id": 1, "start_time": "2025-12-05T10:00:00Z" }` |
+| `PATCH` | `/appointments/:id` | Actualizar un turno | `{ "start_time": "...", "status": "CONFIRMED" }` |
+| `DELETE` | `/appointments/:id` | Eliminar un turno | 
 
 ---
 
@@ -137,16 +145,18 @@ src/
 ## 🚧 Roadmap
 
 - [x] **Fase 1**: CRUD completo de Servicios y Clientes
-- [ ] **Fase 2**: Implementar gestión de Turnos (Appointments)
+- [x] **Fase 2**: Implementar gestión de Turnos (Appointments)
 - [ ] **Fase 3**: Agregar validaciones con Zod
-- [ ] **Fase 4**: Autenticación y autorización
-- [ ] **Fase 5**: Notificaciones y recordatorios
+- [ ] **Fase 4**: Autenticación y autorización (JWT)
+- [ ] **Fase 5**: Documentación con Swagger / OpenAPI
+- [ ] **Fase 6**: Implementaion de Testing
+- [ ] **Fase 7**: Logs estructurados
+- [ ] **Fase 8**: Deploy productivo
 
 ---
 
-## 👨‍💻 Desarrollo
+## 👤 Autor y Agradecimientos
 
-Este proyecto es parte de mi aprendizaje en desarrollo backend. Cualquier feedback o sugerencia es bienvenida.
+**Desarrollado por:** Ezequiel Pacheco
 
-**Universidad:** Universidad Nacional de Quilmes  
-**Inicio de cursada:** Febrero 2026
+Este proyecto es parte de mi **aprendizaje en desarrollo backend** con Node.js, TypeScript y la arquitectura de capas. Cualquier *feedback* o sugerencia sobre la implementación es bienvenida.
