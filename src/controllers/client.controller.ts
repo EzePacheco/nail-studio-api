@@ -44,6 +44,7 @@ export class ClientController {
 
             const newClient = await clientService.createClient({ name, phone, email });
             return res.status(201).json(newClient);
+
         } catch (e: any) {
             return res.status(500).json({ error: e.message });
         }
@@ -69,6 +70,7 @@ export class ClientController {
 
             const updatedClient = await clientService.updateClient(id, { name, phone, email });
             return res.status(200).json(updatedClient);
+            
         } catch (e: any) {
             if (e.message.includes('no encontrado')) {
                 return res.status(404).json({ error: e.message });

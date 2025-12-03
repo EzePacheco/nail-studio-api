@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import { envs } from './config/envs';
 import clientRouter from './routes/client.routes'
 import serviceRouter from './routes/service.routes'
+import appointmentRouter from './routes/appointment.routes';
 
 import { db } from './config/prisma';
 
@@ -10,8 +11,9 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware 
 app.use(express.json()); // ? Permite a Express leer el cuerpo de las peticiones en formato JSON
-app.use('/services', serviceRouter)
-app.use('/clients', clientRouter)
+app.use('/services', serviceRouter);
+app.use('/clients', clientRouter);
+app.use('/appointments', appointmentRouter);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
